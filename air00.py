@@ -1,35 +1,18 @@
-"""
-"""
+"""Split"""
 import sys
+import re
 
 # Fonctions utilisées
+def split_argument(arguments) :
+    argument = arguments[0]
+    news_arguments = re.split(r"[ \n\t]+", argument)
+    return news_arguments
 
 # Partie 1 : Gestion d'erreur
 def is_valid_number_of_arguments(arguments) :
-    if len(arguments) < 3 :
+    if len(arguments) != 1 :
         print("Error, ")
         return False
-    return True
-    
-def is_digit(arguments) :
-    for argument in arguments :
-        if not argument.lstrip("-").isdigit() :
-            print("Error, ")
-            return False
-    return True
-
-def is_valid_number(arguments) :
-    number = int(arguments[0])
-    if number < 1 :
-        print(-1)
-        return False
-    return True
-
-def is_alpha(arguments):
-    for argument in arguments :
-        if not argument.isalpha() :
-            print("Vous devez saisir des arguments composés de lettres a-z / A-Z")
-            return False
     return True
 
 # Partie 2 : Parsing
@@ -38,11 +21,28 @@ def get_arguments() :
     return arguments
 
 # Partie 3 : Résolution
-def display() :
-    
+def display_news_arguments() :
+    if not is_valid_number_of_arguments(get_arguments()) :
+        return
+    print("\n".join(split_argument(get_arguments())))    
 
 # Partie 4 : Affichage
-display()
+display_news_arguments()
 """
+Créez un programme qui découpe une chaîne de caractères en tableau (séparateurs : espaces, tabulations, retours à la ligne).
 
+Votre programme devra utiliser une fonction prototypée comme ceci :
+ma_fonction(string_à_couper, string_séparateur) { // syntaxe selon votre langage
+	# votre algorithme
+	return (tableau)
+}
+
+
+Exemples d’utilisation :
+$> python exo.py “Bonjour les gars”
+Bonjour
+les
+gars
+
+Afficher error et quitter le programme en cas de problèmes d’arguments.
 """
