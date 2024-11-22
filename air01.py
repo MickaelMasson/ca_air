@@ -1,12 +1,11 @@
 """Split en fonction"""
 import sys
-import re
 
 # Fonctions utilisées
 def split_arguments(arguments) :
     separator = arguments[1]
-    arguments = str(arguments[0])
-    news_arguments = arguments.split(separator)
+    argument = str(arguments[0])
+    news_arguments = argument.split(separator)
     return news_arguments
 
 # Partie 1 : Gestion d'erreur
