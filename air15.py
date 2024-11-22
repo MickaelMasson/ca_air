@@ -39,7 +39,7 @@ def get_arguments() :
 
 # Partie 3 : Résolution
 def display() :
-    
+    print("")
 
 # Partie 4 : Affichage
 display()
