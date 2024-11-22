@@ -7,7 +7,6 @@ def is_in_string(arguments):
     ref_argument = str(arguments[-1]).lower()
     news_names = []
     for i in base_arguments :
-        #name = str(i).lower()
         if not ref_argument in str(i).lower() :
             news_names.append(i)
     return news_names
