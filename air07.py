@@ -4,9 +4,11 @@ import sys
 # Fonctions utilisées
 def add_number_sort_list(arguments):
     base_arguments = arguments[:-1]
-    new_number = arguments[-1]
-    base_arguments.append(new_number)
-    new_sort_list = sorted(base_arguments)
+    new_number = int(arguments[-1])
+    numbers = list(map(int, base_arguments))
+    numbers.append(new_number)
+    new_sort_numbers = sorted(numbers)
+    new_sort_list = list(map(str, new_sort_numbers))
     return new_sort_list
 
 # Partie 1 : Gestion d'erreur
@@ -29,7 +31,7 @@ def get_arguments() :
     return arguments
 
 # Partie 3 : Résolution
-def display() :
+def display_sort_numbers() :
     if not is_valid_number_of_arguments(get_arguments()) :
         return
     if not is_digit(get_arguments()) :
@@ -37,7 +39,7 @@ def display() :
     print(" ".join(add_number_sort_list(get_arguments())))
 
 # Partie 4 : Affichage
-display()
+display_sort_numbers()
 """
 Créez un programme qui ajoute à une liste d’entiers triée un nouvel entier tout en gardant la liste triée dans l’ordre croissant. Le dernier argument est l’élément à ajouter.
 
