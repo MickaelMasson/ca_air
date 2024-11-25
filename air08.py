@@ -11,11 +11,10 @@ def get_two_list(arguments) :
 
 def get_sorted_list(first_list, second_list) :
     new_list = first_list + second_list
-    print(new_list)
     numbers = list(map(int, new_list))
-    new_sorted_numbers = sorted(numbers)
-    new_sorted_list = list(map(str, new_sorted_numbers))
-    return new_sorted_list
+    sorted_numbers = sorted(numbers)
+    sorted_str_list = list(map(str, sorted_numbers))
+    return sorted_str_list
 
 # Partie 1 : Gestion d'erreur
 def is_valid_number_of_arguments(arguments) :
