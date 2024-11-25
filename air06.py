@@ -2,14 +2,18 @@
 import sys
 
 # Fonctions utilisées
-def is_in_string(arguments):
+def get_arguments_and_key_string(arguments) :
     base_arguments = arguments[0:-1]
-    ref_argument = str(arguments[-1]).lower()
-    news_names = []
-    for i in base_arguments :
-        if not ref_argument in str(i).lower() :
-            news_names.append(i)
-    return news_names
+    key_string = str(arguments[-1]).lower()
+    return base_arguments, key_string
+
+
+def is_in_string(arguments, key_string):
+    news_arguments = []
+    for i in arguments :
+        if not key_string in str(i).lower() :
+            news_arguments.append(i)
+    return news_arguments
 
 # Partie 1 : Gestion d'erreur
 def is_valid_number_of_arguments(arguments) :
