@@ -2,12 +2,20 @@
 import sys
 
 # Fonctions utilisées
-def sort_fusion_numbers(arguments) :
-    arguments.remove("fusion")
-    numbers = list(map(int, arguments))
-    new_sort_numbers = sorted(numbers)
-    new_sort_list = list(map(str, new_sort_numbers))
-    return new_sort_list
+def get_two_list(arguments) :
+    separator = "fusion"
+    index_separator = arguments.index(separator)
+    first_list = arguments[:index_separator]
+    second_list = arguments[index_separator + 1:]
+    return first_list, second_list
+
+def get_sorted_list(first_list, second_list) :
+    new_list = first_list + second_list
+    print(new_list)
+    numbers = list(map(int, new_list))
+    new_sorted_numbers = sorted(numbers)
+    new_sorted_list = list(map(str, new_sorted_numbers))
+    return new_sorted_list
 
 # Partie 1 : Gestion d'erreur
 def is_valid_number_of_arguments(arguments) :
@@ -42,7 +50,8 @@ def display_sort_numbers() :
         return
     if not is_digit(get_arguments()) :
         return
-    print(" ".join(sort_fusion_numbers(get_arguments())))
+    first_list, second_list = get_two_list(get_arguments())
+    print(" ".join(get_sorted_list(first_list, second_list)))
 
 # Partie 4 : Affichage
 display_sort_numbers()
