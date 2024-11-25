@@ -11,7 +11,7 @@ def split_argument(arguments) :
 # Partie 1 : Gestion d'erreur
 def is_valid_number_of_arguments(arguments) :
     if len(arguments) != 1 :
-        print("Error, ")
+        print("Error, vous devez saisir une chaine de caractère")
         return False
     return True
 
