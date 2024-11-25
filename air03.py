@@ -14,7 +14,7 @@ def get_single_arguments(arguments) :
 # Partie 1 : Gestion d'erreur
 def is_valid_number_of_arguments(arguments) :
     if len(arguments) < 1 :
-        print("Error, ")
+        print("Error, vous devez saisir au moins 1 argument")
         return False
     return True
 
