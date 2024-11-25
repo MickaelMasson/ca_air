@@ -3,10 +3,10 @@ import sys
 
 # Fonctions utilisées
 def get_string_result(arguments) :
-    arguments_without_last = arguments[0:-1]
+    arguments_without_operator = arguments[0:-1]
     operator_number = int(arguments[-1])
-    numbers = list(map(int, arguments_without_last))
-    new_numbers = list(map(lambda nombre: nombre + operator_number, numbers))
+    numbers = list(map(int, arguments_without_operator))
+    new_numbers = list(map(lambda number: number + operator_number, numbers))
     news_list = list(map(str, new_numbers))
     return news_list
 
@@ -25,8 +25,8 @@ def is_digit(arguments) :
     return True
 
 def is_valid_operator(arguments) :
-    argument = arguments[-1]
-    if argument[0] != "+" and argument[0] != "-" :
+    operator = arguments[-1]
+    if operator[0] != "+" and operator[0] != "-" :
             print("Error, vous devez saisir un operateur au dernier argument")
             return False
     return True
@@ -37,7 +37,7 @@ def get_arguments() :
     return arguments
 
 # Partie 3 : Résolution
-def display() :
+def display_result() :
     if not is_valid_number_of_arguments(get_arguments()) :
         return
     if not is_digit(get_arguments()) :
@@ -47,7 +47,7 @@ def display() :
     print(", ".join(get_string_result(get_arguments())))
 
 # Partie 4 : Affichage
-display()
+display_result()
 """
 Créez un programme qui est capable de reconnaître et de faire une opération (addition ou soustraction) sur chaque entier d’une liste.
 
