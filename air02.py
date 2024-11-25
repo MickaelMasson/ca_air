@@ -2,9 +2,12 @@
 import sys
 
 # Fonctions utilisées
-def get_new_string(arguments) :
+def get_arguments_and_separator(arguments) :
     separator = arguments[-1]
-    arguments = arguments[0:-1]
+    news_arguments = arguments[0:-1]
+    return news_arguments, separator
+
+def get_new_string(arguments, separator) :
     news_string = separator.join(arguments)
     return news_string
 
@@ -24,7 +27,8 @@ def get_arguments() :
 def display_news_string() :
     if not is_valid_number_of_arguments(get_arguments()) :
         return
-    print(get_new_string(get_arguments()))
+    arguments, separator = get_arguments_and_separator(get_arguments())
+    print(get_new_string(arguments, separator))
 
 # Partie 4 : Affichage
 display_news_string()
