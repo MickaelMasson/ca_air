@@ -2,20 +2,20 @@
 import sys
 
 # Fonctions utilisées
-def get_sting_without_double_lettre(arguments) :
+def get_string_without_double_lettre(arguments) :
     argument = arguments[0]
-    news_string = f"{argument[0]}"
+    news_string = str(argument[0])
     for i in range(1, len(argument)) :
         letter = argument[i]
         last_letter = news_string[-1]
-        if not letter == last_letter :
+        if letter != last_letter :
             news_string = news_string + letter
     return news_string
         
 # Partie 1 : Gestion d'erreur
 def is_valid_number_of_arguments(arguments) :
-    if len(arguments) < 1 :
-        print("Error, vous devez entrer au moins 1 argument")
+    if len(arguments) != 1 :
+        print("Error, vous devez entrer une seule chaine de caractère")
         return False
     return True
     
@@ -28,7 +28,7 @@ def get_arguments() :
 def display_new_string() :
     if not is_valid_number_of_arguments(get_arguments()) :
         return
-    print(get_sting_without_double_lettre(get_arguments()))
+    print(get_string_without_double_lettre(get_arguments()))
 
 # Partie 4 : Affichage
 display_new_string()
