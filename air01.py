@@ -2,9 +2,12 @@
 import sys
 
 # Fonctions utilisées
-def split_arguments(arguments) :
-    separator = arguments[1]
+def get_string_and_separator(arguments) :
     argument = str(arguments[0])
+    separator = arguments[1]
+    return argument, separator
+
+def split_arguments(argument, separator) :
     news_arguments = argument.split(separator)
     return news_arguments
 
@@ -34,7 +37,8 @@ def display_news_arguments() :
         return
     if not is_valid_separator(get_arguments()) :
         return
-    print("\n".join(split_arguments(get_arguments())))    
+    argument, separator = get_string_and_separator(get_arguments())
+    print("\n".join(split_arguments(argument, separator)))
 
 # Partie 4 : Affichage
 display_news_arguments()
