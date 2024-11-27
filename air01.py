@@ -22,7 +22,7 @@ def is_valid_separator(arguments):
     first_argument = arguments[0]
     second_argument = arguments[1]
     if not second_argument in first_argument :
-        print("Le dernier argument doit etre un séparateur present dans le premier argument")
+        print("Error, Le dernier argument doit etre un séparateur present dans le premier argument")
         return False
     return True
 
