@@ -2,51 +2,54 @@
 import sys
 
 # Fonctions utilisées
-def get_pyramid(arguments) :
-    character = arguments[0]
-    number_of_floors = int(arguments[1])
+def display_pyramid(patern: str, number_of_floors: int) :
     for i in range(number_of_floors) :
-         print(" " * (number_of_floors - (i + 1)) + character * ((2 * i) + 1))
+         print(" " * (number_of_floors - (i + 1)) + patern * ((2 * i) + 1))
     return
 
 # Partie 1 : Gestion d'erreur
-def is_valid_number_of_arguments(arguments) :
-    if len(arguments) != 2 :
-        print("Error, vous devez saisir 2 arguments")
+def is_valid_arguments(arguments: list[str], number_of_argument: int) -> bool:
+    if len(arguments) != number_of_argument :
+        print("Error, vos arguments ne sont pas valide")
         return False
     return True
 
-def is_single_character(arguments):
-    argument = arguments[0]
+def is_single_character(argument: str) -> bool:
     if len(argument) != 1 :
             print("Vous devez saisir un seul caractère en 1er arguments")
             return False
     return True
     
-def is_digit_number_of_floors(arguments) :
-    argument = arguments[1]
-    if not argument.isdigit() :
-            print("Error, vous devez entrez un entier positif en 2eme argument")
+def is_digit(string: str) -> bool:
+    for character in string :
+        if not "0" <= character <= "9" :
+            print(f"Error, '{string}' n'est pas un nombre entier positif")
             return False
     return True
 
 # Partie 2 : Parsing
-def get_arguments() :
+def get_arguments() -> list[str] :
     arguments = sys.argv[1:]
     return arguments
 
 # Partie 3 : Résolution
-def display_pyramid() :
-    if not is_valid_number_of_arguments(get_arguments()) :
+def get_pyramid() :
+    arguments = get_arguments()
+    number_of_argument_expected = 2
+    if not is_valid_arguments(arguments, number_of_argument_expected) :
         return
-    if not is_digit_number_of_floors(get_arguments()) :
+    first_argument = arguments[0]
+    if not is_single_character(first_argument) :
         return
-    if not is_single_character(get_arguments()) :
+    patern = first_argument
+    second_argument = arguments[1]
+    if not is_digit(second_argument) :
         return
-    get_pyramid(get_arguments())
+    number_of_floors = int(second_argument)
+    display_pyramid(patern, number_of_floors)
 
 # Partie 4 : Affichage
-display_pyramid()
+get_pyramid()
 """
 Afficher un escalier constitué d’un caractère et d’un nombre d’étages donné en paramètre.
 
