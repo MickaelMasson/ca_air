@@ -2,33 +2,31 @@
 import sys
 
 # Fonctions utilisées
-def get_arguments_and_separator(arguments) :
-    separator = arguments[-1]
-    news_arguments = arguments[0:-1]
-    return news_arguments, separator
-
-def get_new_string(arguments, separator) :
+def get_new_string(arguments: list[str], separator: str) -> str:
     news_string = separator.join(arguments)
     return news_string
 
 # Partie 1 : Gestion d'erreur
-def is_valid_number_of_arguments(arguments) :
-    if len(arguments) < 2 :
-        print("Error, vous devez saisir 2 arguments")
+def is_valid_arguments(arguments: list, index_number: int) -> bool :
+    if not len(arguments) > index_number :
+        print("Error, le nombre d'arguments n'est pas valide")
         return False
     return True
 
 # Partie 2 : Parsing
-def get_arguments() :
+def get_arguments() -> list :
     arguments = sys.argv[1:]
     return arguments
 
 # Partie 3 : Résolution
 def display_news_string() :
-    if not is_valid_number_of_arguments(get_arguments()) :
+    arguments = get_arguments()
+    min_number_of_argument_expected = 2
+    if not is_valid_arguments(arguments, min_number_of_argument_expected) :
         return
-    arguments, separator = get_arguments_and_separator(get_arguments())
-    print(get_new_string(arguments, separator))
+    main_arguments = arguments[:-1]
+    separator = arguments[-1]
+    print(get_new_string(main_arguments, separator))
 
 # Partie 4 : Affichage
 display_news_string()
