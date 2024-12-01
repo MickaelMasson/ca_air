@@ -2,52 +2,58 @@
 import sys
 
 # Fonctions utilisées
-def get_string_result(arguments) :
-    arguments_without_operator = arguments[0:-1]
-    operator_number = int(arguments[-1])
-    numbers = list(map(int, arguments_without_operator))
-    new_numbers = list(map(lambda number: number + operator_number, numbers))
-    news_list = list(map(str, new_numbers))
-    return news_list
+def add_to_numbers(numbers: list[int], operator_number: int) -> list[int]:
+    result_numbers = []
+    for number in numbers :
+        result_numbers.append(number + operator_number)
+    return result_numbers
 
 # Partie 1 : Gestion d'erreur
-def is_valid_number_of_arguments(arguments) :
-    if len(arguments) < 2 :
-        print("Error, vous devez sasir au moins 2 arguments")
+def is_valid_arguments(arguments: list, number_of_argument: int) -> bool:
+    if len(arguments) < number_of_argument :
+        print("Error, vos arguments ne sont pas valide")
         return False
     return True
-    
-def is_digit(arguments) :
-    for argument in arguments :
-        if not argument.lstrip("-+").isdigit() :
-            print("Error, vous devez saisir des nombre entiers")
+
+def is_digit(string: str) -> bool :
+    string = string.lstrip("-+")
+    for character in string :
+        if not "0" <= character <= "9" :
+            print(f"Error, '{string}' n'est pas un nombre entier")
             return False
     return True
 
-def is_valid_operator(arguments) :
-    operator = arguments[-1]
+def is_valid_operator(operator: str) -> bool :
     if operator[0] != "+" and operator[0] != "-" :
             print("Error, vous devez saisir un operateur au dernier argument")
             return False
     return True
 
 # Partie 2 : Parsing
-def get_arguments() :
+def get_arguments() -> list :
     arguments = sys.argv[1:]
     return arguments
 
 # Partie 3 : Résolution
-def display_result() :
-    if not is_valid_number_of_arguments(get_arguments()) :
+def display_add_to_numbers() :
+    arguments = get_arguments()
+    min_number_of_argument_expected = 2
+    if not is_valid_arguments(arguments, min_number_of_argument_expected) :
         return
-    if not is_digit(get_arguments()) :
+    for argument in arguments :
+        if not is_digit(argument) :
+            return
+    operator = arguments[-1]
+    if not is_valid_operator(operator) :
         return
-    if not is_valid_operator(get_arguments()) :
-        return
-    print(", ".join(get_string_result(get_arguments())))
+    base_numbers = list(map(int, arguments[0:-1]))
+    operator_number = int(arguments[-1])
+    new_numbers = add_to_numbers(base_numbers, operator_number)
+    new_str_list = list(map(str, new_numbers))
+    print(" ".join(new_str_list))
 
 # Partie 4 : Affichage
-display_result()
+display_add_to_numbers()
 """
 Créez un programme qui est capable de reconnaître et de faire une opération (addition ou soustraction) sur chaque entier d’une liste.
 
