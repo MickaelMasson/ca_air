@@ -1,9 +1,8 @@
 """Split"""
 import sys
-#import re
 
 # Fonctions utilisées
-def split_argument(argument: str, separator: str) -> list:
+def get_split_argument(argument: str, separator: str) -> list:
     for character in separator :
         argument = argument.replace(character, "|")
     news_arguments = argument.split("|")
@@ -22,17 +21,17 @@ def get_arguments() -> list :
     return arguments
 
 # Partie 3 : Résolution
-def display_news_arguments() :
+def display_split_arguments() :
     arguments = get_arguments()
     number_of_argument_expected = 1
     if not is_valid_arguments(arguments, number_of_argument_expected) :
         return
     argument = arguments[0]
     separator = "\n\t "
-    print("\n".join(split_argument(argument, separator)))    
+    print("\n".join(get_split_argument(argument, separator)))    
 
 # Partie 4 : Affichage
-display_news_arguments()
+display_split_arguments()
 """
 Créez un programme qui découpe une chaîne de caractères en tableau (séparateurs : espaces, tabulations, retours à la ligne).
 
