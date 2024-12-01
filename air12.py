@@ -2,52 +2,57 @@
 import sys
 
 # Fonctions utilisées
-def partition(list, start, end) :
-    pivot = list[end]
+def partition(numbers, start, end) :
+    pivot = numbers[end]
     j = start
     for i in range(start,end) :
-        if list[i] <= pivot:
-            list[i], list[j] = list[j], list[i]
+        if numbers[i] <= pivot:
+            numbers[i], numbers[j] = numbers[j], numbers[i]
             j += 1
-    list[j], list[end] = list[end], list[j]
+    numbers[j], numbers[end] = numbers[end], numbers[j]
     return j
 
-def sort_quicksort(list, start=0, end=None) :
+def get_quicksort(numbers: list[int], start=0, end=None) -> list[int]:
     if end == None :
-        end = len(list) - 1
+        end = len(numbers) - 1
 
     if end > start :
-        pivot = partition(list, start, end)
-        sort_quicksort(list, start, pivot - 1)
-        sort_quicksort(list, pivot + 1, end)
-    return list
+        pivot = partition(numbers, start, end)
+        get_quicksort(numbers, start, pivot - 1)
+        get_quicksort(numbers, pivot + 1, end)
+    return numbers
 
 # Partie 1 : Gestion d'erreur
-def is_valid_number_of_arguments(arguments) :
-    if len(arguments) < 3 :
-        print("Error, vous devez saisir au moins 2 arguments")
+def is_valid_arguments(arguments: list[str], number_of_argument: int) -> bool:
+    if len(arguments) < number_of_argument :
+        print("Error, le nombre d'arguments n'est pas valide")
         return False
     return True
-    
-def is_digit(arguments) :
-    for argument in arguments :
-        if not argument.lstrip("-").isdigit() :
-            print("Error, tous vos arguments doivent être des nombres entiers")
+
+def is_digit(string: str) -> bool:
+    for character in string :
+        if not "0" <= character <= "9" :
+            print(f"Error, '{string}' n'est pas un nombre entier positif")
             return False
     return True
 
 # Partie 2 : Parsing
-def get_arguments() :
+def get_arguments() -> list[str] :
     arguments = sys.argv[1:]
     return arguments
 
 # Partie 3 : Résolution
 def display_sort_list() :
-    if not is_valid_number_of_arguments(get_arguments()) :
+    arguments = get_arguments()
+    min_number_of_argument_expected = 3
+    if not is_valid_arguments(arguments, min_number_of_argument_expected) :
         return
-    if not is_digit(get_arguments()) :
-        return
-    print(" ".join(sort_quicksort(get_arguments())))
+    for argument in arguments :
+        if not is_digit(argument) :
+            return
+    numbers = list(map(int, arguments))
+    sort_numbers = get_quicksort(numbers)
+    print(" ".join(map(str, sort_numbers)))
 
 # Partie 4 : Affichage
 display_sort_list()
