@@ -2,36 +2,37 @@
 import sys
 
 # Fonctions utilisées
-def get_string_without_double_lettre(arguments) :
-    argument = arguments[0]
-    news_string = str(argument[0])
-    for i in range(1, len(argument)) :
-        letter = argument[i]
+def get_string_without_double_character(argument: str) -> str :
+    news_string = argument[0]
+    for character in argument[1:] :
         last_letter = news_string[-1]
-        if letter != last_letter :
-            news_string = news_string + letter
+        if character != last_letter :
+            news_string = news_string + character
     return news_string
-        
+
 # Partie 1 : Gestion d'erreur
-def is_valid_number_of_arguments(arguments) :
-    if len(arguments) != 1 :
-        print("Error, vous devez entrer une seule chaine de caractère")
+def is_valid_arguments(arguments: list, number_of_argument: int) -> bool:
+    if len(arguments) != number_of_argument :
+        print("Error, le nombre d'arguments n'est pas valide")
         return False
     return True
     
 # Partie 2 : Parsing
-def get_arguments() :
+def get_arguments() -> list :
     arguments = sys.argv[1:]
     return arguments
 
 # Partie 3 : Résolution
-def display_new_string() :
-    if not is_valid_number_of_arguments(get_arguments()) :
+def display_string_without_double_character() :
+    arguments = get_arguments()
+    number_of_argument_expected = 1
+    if not is_valid_arguments(arguments, number_of_argument_expected) :
         return
-    print(get_string_without_double_lettre(get_arguments()))
+    argument = arguments[0]
+    print(get_string_without_double_character(argument))
 
 # Partie 4 : Affichage
-display_new_string()
+display_string_without_double_character()
 """
 Créez un programme qui affiche une chaîne de caractères en évitant les caractères identiques adjacents.
 
