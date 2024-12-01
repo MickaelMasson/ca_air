@@ -1,30 +1,35 @@
 """Split"""
 import sys
-import re
+#import re
 
 # Fonctions utilisées
-def split_argument(arguments) :
-    argument = arguments[0]
-    news_arguments = re.split(r"[ \n\t]+", argument)
+def split_argument(argument: str, separator: str) -> list:
+    for character in separator :
+        argument = argument.replace(character, "|")
+    news_arguments = argument.split("|")
     return news_arguments
 
 # Partie 1 : Gestion d'erreur
-def is_valid_number_of_arguments(arguments) :
-    if len(arguments) != 1 :
-        print("Error, vous devez saisir une chaine de caractère")
+def is_valid_arguments(arguments: list, index_number: int) -> bool :
+    if len(arguments) != index_number :
+        print("Error, le nombre d'arguments n'est pas valide")
         return False
     return True
 
 # Partie 2 : Parsing
-def get_arguments() :
+def get_arguments() -> list :
     arguments = sys.argv[1:]
     return arguments
 
 # Partie 3 : Résolution
 def display_news_arguments() :
-    if not is_valid_number_of_arguments(get_arguments()) :
+    arguments = get_arguments()
+    number_of_argument_expected = 1
+    if not is_valid_arguments(arguments, number_of_argument_expected) :
         return
-    print("\n".join(split_argument(get_arguments())))    
+    argument = arguments[0]
+    separator = "\n\t "
+    print("\n".join(split_argument(argument, separator)))    
 
 # Partie 4 : Affichage
 display_news_arguments()
