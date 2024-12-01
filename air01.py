@@ -2,46 +2,43 @@
 import sys
 
 # Fonctions utilisées
-def get_string_and_separator(arguments) :
-    argument = str(arguments[0])
-    separator = arguments[1]
-    return argument, separator
-
-def split_arguments(argument, separator) :
-    news_arguments = argument.split(separator)
-    return news_arguments
+def get_split_arguments(argument: str, separator: str) -> list[str]:
+    arguments = argument.split(separator)
+    return arguments
 
 # Partie 1 : Gestion d'erreur
-def is_valid_number_of_arguments(arguments) :
-    if len(arguments) != 2 :
-        print("Error, vous devez saisir 2 arguments")
+def is_valid_arguments(arguments: list, number_of_argument: int) -> bool:
+    if len(arguments) != number_of_argument :
+        print("Error, le nombre d'arguments n'est pas valide")
         return False
     return True
 
-def is_valid_separator(arguments):
-    first_argument = arguments[0]
-    second_argument = arguments[1]
-    if not second_argument in first_argument :
-        print("Error, Le dernier argument doit etre un séparateur present dans le premier argument")
-        return False
-    return True
+def is_valid_separator(argument: str, separator: str) -> bool:
+    for i in range(len(argument) - len(separator) + 1) :
+        if argument[i:i + len(separator)] == separator :
+            return True
+    print("Error, Le dernier argument doit etre un séparateur present dans le premier argument")
+    return False
 
 # Partie 2 : Parsing
-def get_arguments() :
+def get_arguments() -> list :
     arguments = sys.argv[1:]
     return arguments
 
 # Partie 3 : Résolution
-def display_news_arguments() :
-    if not is_valid_number_of_arguments(get_arguments()) :
+def display_split_arguments() :
+    arguments = get_arguments()
+    number_of_argument_expected = 2
+    if not is_valid_arguments(arguments, number_of_argument_expected) :
         return
-    if not is_valid_separator(get_arguments()) :
+    main_argument = arguments[0]
+    separator = arguments[1]
+    if not is_valid_separator(main_argument, separator) :
         return
-    argument, separator = get_string_and_separator(get_arguments())
-    print("\n".join(split_arguments(argument, separator)))
+    print("\n".join(get_split_arguments(main_argument, separator)))
 
 # Partie 4 : Affichage
-display_news_arguments()
+display_split_arguments()
 """
 Créez un programme qui découpe une chaîne de caractères en tableau en fonction du séparateur donné en 2e argument.
 
