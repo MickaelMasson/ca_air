@@ -2,50 +2,54 @@
 import sys
 
 # Fonctions utilisées
-def get_base_arguments_and_new_argument(arguments) :
-    base_arguments = arguments[:-1]
-    new_number = int(arguments[-1])
-    return base_arguments, new_number
-
-def add_number_sort_list(base_arguments, new_number):
-    numbers = list(map(int, base_arguments))
-    numbers.append(new_number)
-    sorted_numbers = sorted(numbers)
-    sorted_str_list = list(map(str, sorted_numbers))
-    return sorted_str_list
+def add_number_in_sorted_numbers(numbers: list[int], new_number: int) -> list[int]:
+    new_numbers = numbers
+    for i in range(len(numbers)) :
+        if new_number < numbers[i] :
+            new_numbers.insert(i, new_number)
+            return new_numbers
+    new_numbers.append(new_number)
+    return new_numbers
 
 # Partie 1 : Gestion d'erreur
-def is_valid_number_of_arguments(arguments) :
-    if len(arguments) < 3 :
-        print("Error, vous devez saisir au moins 3 arguments")
+def is_valid_arguments(arguments: list, number_of_argument: int) -> bool:
+    if len(arguments) < number_of_argument :
+        print("Error, vos arguments ne sont pas valide")
         return False
     return True
-    
-def is_digit(arguments) :
-    for argument in arguments :
-        if not argument.lstrip("-").isdigit() :
-            print("Error, tous vos arguments doivent être des entier")
+
+def is_digit(string: str) -> bool:
+    string = string.lstrip("-")
+    for character in string :
+        if not "0" <= character <= "9" :
+            print(f"Error, '{string}' n'est pas un nombre entier")
             return False
     return True
 
 # Partie 2 : Parsing
-def get_arguments() :
+def get_arguments() -> list :
     arguments = sys.argv[1:]
     return arguments
 
 # Partie 3 : Résolution
-def display_sorted_numbers() :
-    if not is_valid_number_of_arguments(get_arguments()) :
+def display_new_sorted_numbers() :
+    arguments = get_arguments()
+    min_number_of_argument_expected = 3
+    if not is_valid_arguments(arguments, min_number_of_argument_expected) :
         return
-    if not is_digit(get_arguments()) :
-        return
-    base_arguments, new_number = get_base_arguments_and_new_argument(get_arguments())
-    print(" ".join(add_number_sort_list(base_arguments, new_number)))
+    for argument in arguments :
+        if not is_digit(argument) :
+            return
+    numbers = list(map(int, arguments[:-1]))
+    new_number = int(arguments[-1])
+    new_sort_numbers = add_number_in_sorted_numbers(numbers, new_number)
+    print(" ".join(list(map(str, new_sort_numbers))))
 
 # Partie 4 : Affichage
-display_sorted_numbers()
+display_new_sorted_numbers()
 """
-Créez un programme qui ajoute à une liste d’entiers triée un nouvel entier tout en gardant la liste triée dans l’ordre croissant. Le dernier argument est l’élément à ajouter.
+Créez un programme qui ajoute à une liste d’entiers triée un nouvel entier tout en 
+gardant la liste triée dans l’ordre croissant. Le dernier argument est l’élément à ajouter.
 
 Utilisez une fonction de ce genre (selon votre langage) :
 sorted_insert(array, new_element) {
