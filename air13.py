@@ -1,495 +1,132 @@
 """Meta exercice"""
 import sys
 import os
+import json
 import subprocess
 
+separator = "----------------------------------------------------------------------------------------------------"
+
 # Fonctions utilisées
-class Counter_test_passed:
-    def __init__(self):
-        self.value = 0
-    def increment(self):
-        self.value += 1
-    def get_value(self):
-        return self.value
-counter_test_passed = Counter_test_passed()
-
-class Counter_test_passed_with_success:
-    def __init__(self):
-        self.value = 0
-    def increment(self):
-        self.value += 1
-    def get_value(self):
-        return self.value
-counter_test_passed_with_success = Counter_test_passed_with_success()
-
-class Counter_test_passed_with_failure:
-    def __init__(self):
-        self.value = 0
-    def increment(self):
-        self.value += 1
-    def get_value(self):
-        return self.value
-counter_test_passed_with_failure = Counter_test_passed_with_failure()
 
 def get_path() :
     full_path = sys.argv[0]
     index_last_slash = full_path.rfind("/")
-    path = full_path[0:index_last_slash + 1]
-    return path
+    path = full_path[:index_last_slash + 1]
 
-def get_filename_with_path(file_name) :
-    filename_with_path = get_path() + file_name
-    return filename_with_path
+    index_next_last_slash = path[:-1].rfind("/")
+    parent_path = path[:index_next_last_slash + 1]
 
-def get_result_file(file_name, arguments_in) :
-    filename_with_path = get_filename_with_path(file_name)
+    return path, parent_path
 
+def get_result_file(script_path: str, arguments_in) -> str:
     if type(arguments_in) is list :
         result = subprocess.run(
-        ["/bin/python3.13", filename_with_path] + arguments_in,  # Commande et argument
-        capture_output=True,               # Capture la sortie
-        text=True                          # Décoder en chaîne (pas en bytes)
+        ["/bin/python3.13", script_path] + arguments_in,
+        capture_output=True,
+        text=True
+)
+    elif arguments_in == "" :
+        result = subprocess.run(
+        ["/bin/python3.13", script_path],
+        capture_output=True,
+        text=True
 )
     else :
         result = subprocess.run(
-        ["/bin/python3.13", filename_with_path, arguments_in],  # Commande et argument
-        capture_output=True,               # Capture la sortie
-        text=True                          # Décoder en chaîne (pas en bytes)
+        ["/bin/python3.13", script_path, arguments_in],
+        capture_output=True,
+        text=True
 )
-    arguments_out = result.stdout
-    return arguments_out
-
-def is_success_test(file_name, arguments_in, good_answer) :
-    arguments_out = get_result_file(file_name, arguments_in)
-    if (arguments_out == good_answer or arguments_out.startswith(good_answer)) and good_answer != "" :
-        counter_test_passed.increment()
-        counter_test_passed_with_success.increment()
-        return True
-    else :
-        counter_test_passed.increment()
-        counter_test_passed_with_failure.increment()
-        return False
-
-def run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise) :
-    if is_success_test(file_name, arguments_in, good_answer) :
-        print(f"\033[32m{file_name} ({test_number}/{number_of_test_by_exercise}) : Success\033[0m")
-    else : 
-        print(f"\033[31m{file_name} ({test_number}/{number_of_test_by_exercise}) : Failure\033[0m")
+    argument_out_with_n = result.stdout
+    list_arguments_out = []
+    argument_out = argument_out_with_n[:-1]
+    list_arguments_out.append(argument_out)
+    return argument_out
 
 # Partie 1 : Gestion d'erreur
-def is_exist_file(file_name) :
-    filename_with_path = get_filename_with_path(file_name)
-    if not os.path.exists(filename_with_path) :
-        print(f"\033[33mLe fichier {file_name} est introuvable, les tests pour ce fichier ne seront pas executé\033[0m")
+
+def is_every_keys_completed(id_file, level, file_name) -> bool:
+    if id_file == level == file_name == "" :
+        return False
+    elif id_file == "" or level == "" or file_name == "":
+        print(separator + f"\n\033[33m L'un des objets 'files' n'est pas valide, vous devez complétez toutes ces clés dans le fichier json\033[0m\n    'id_file'   : {id_file}\n    'file_name' : {file_name}\n    'level'     : {level}\n" + separator)
+        return False
+    return True
+
+def is_exist_file(script_path):
+    if not os.path.exists(script_path) :
+        print(separator + f"\n\033[31mFichier non trouvé :\033[0m {script_path}\n\033[33m    les tests ne peuvent pas etre executé\033[0m\n" + separator)
         return False
     return True
 
 # Partie 2 : Parsing
 
 # Partie 3 : Résolution
-def get_verif_exercise_air() :
-    separator = "------------------------"
-    
-    file_name = "air00.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = ["jh", "kjh"]
-        good_answer = "Error"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-        #if is_success_test(file_name, arguments_in, good_answer) :
-        #    display_success_message(file_name, test_number, number_of_test_by_exercise)
-        #else : 
-        #    display_failure_message(file_name, test_number, number_of_test_by_exercise)
+def display_result_test():
+    path, parent_path = get_path()
+    json_name = "check_exercises.json"
+    json_full_path = path + json_name
+    test_passed_with_success = 0
+    test_passed = 0
 
-        #test
-        test_number += 1
-        arguments_in = ["bonjour les gars"]
-        good_answer = "bonjour\nles\ngars\n"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
+    with open(json_full_path, "r") as file:
+        data_json = json.load(file)
+ 
+    for file_entry in data_json["files"]:
+        id_file = file_entry["id_file"]
+        file_name = file_entry["file_name"]
+        level = file_entry["level"]
+        tests = file_entry["test"]
+        exercise_path = parent_path + f"ca_{level}/{file_name}"
 
-        #test
-        test_number += 1
-        arguments_in = ["bonjour\tles\tgars"]
-        good_answer = "bonjour\nles\ngars"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
+        if not is_every_keys_completed(id_file, level, file_name) :
+            continue        
+        if not is_exist_file(exercise_path) :
+            continue
+        
+        number_of_test_by_file = 0
+        for test in tests :
+            if test["id_test"] != "" :
+                number_of_test_by_file += 1
 
-        #test
-        test_number += 1
-        arguments_in = ["bonjour\nles\ngars"]
-        good_answer = "bonjour\nles\ngars\n"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
+        for test in tests:
+            id_test = test["id_test"]
+            arguments = test["arguments"]
+            expected_answer = test["answer"]
+            if id_test == "" :
+                continue
 
-    print(separator)
+            answer = get_result_file(exercise_path, arguments)
+            
+            if answer == expected_answer:
+                print(f"\033[32m{file_name} ( {id_test} / {number_of_test_by_file} ) : Success\033[0m")
+                test_passed_with_success += 1
+                test_passed += 1
+            else:
+                print(separator)
+                print(f"\033[31m{file_name} ( {id_test} / {number_of_test_by_file} ) : Failure\033[0m")
+                print(f"    Les arguments saisis :   --> {arguments} <--")
+                print(f"    La réponse attendue :    --> {expected_answer} <--")
+                print(f"    La réponse reçue :       --> {answer} <--")
+                print(separator)
 
-    file_name = "air01.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = ["Crevette"]
-        good_answer = "Error, vous devez saisir 2 arguments"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
+                test_passed += 1
+                
 
-        #test
-        test_number += 1
-        arguments_in = ["Crevette magique dans la mer des étoiles", "banane"]
-        good_answer = "Error, Le dernier argument doit etre un séparateur present dans le premier argument"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = ["Crevette magique dans la mer des étoiles", "la"]
-        good_answer = "Crevette magique dans \n mer des étoiles"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = ["Hakuna Matata. Mais quelle phrase magnifique !", "quelle"]
-        good_answer = "Hakuna Matata. Mais \n phrase magnifique !"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-
-    file_name = "air02.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = ["un seul argument"]
-        good_answer = "Error"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = ["je", "test", "des", "trucs", " "]
-        good_answer = "je test des trucs"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = ["Hakuna", "Matata", "Quel", "chant", "fantastique", "!", "&"]
-        good_answer = "Hakuna&Matata&Quel&chant&fantastique&!"
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-
-    file_name = "air03.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-
-    file_name = "air04.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-    
-    file_name = "air05.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-
-    file_name = "air06.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-    
-    file_name = "air07.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-    
-    file_name = "air08.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-
-    file_name = "air09.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-    
-    file_name = "air10.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-
-    file_name = "air11.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-    
-    file_name = "air12.py"
-    number_of_test_by_exercise = 4
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-        #test
-        test_number += 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-
-    file_name = "air15.py"
-    number_of_test_by_exercise = 1
-    if is_exist_file(file_name) :
-        #test
-        test_number = 1
-        arguments_in = [""]
-        good_answer = ""
-        run_test(file_name, arguments_in, good_answer, test_number, number_of_test_by_exercise)
-
-    print(separator)
-
-    print(f"Total success : {counter_test_passed_with_success.get_value()} / {counter_test_passed.get_value()}")
-    print(f"Total Failure : {counter_test_passed_with_failure.get_value()}")
-
+        
+    print(f"\n    ###################################")
+    print(f"    #                                 #")
+    print(f"    #   Total success : {test_passed_with_success} / {test_passed}     #")
+    print(f"    #   Total Failure : {(test_passed - test_passed_with_success)}             #")
+    print(f"    #                                 #")
+    print(f"    ###################################\n")
 
 # Partie 4 : Affichage
-get_verif_exercise_air()
-"""
-Créez un programme qui vérifie si les exercices de votre épreuve de l’air sont présents dans le répertoire et qu’ils fonctionnent (sauf celui là). Créez au moins un test pour chaque exercice.
+display_result_test()
+
+"""Créez un programme qui vérifie si les exercices de votre épreuve de l’air 
+sont présents dans le répertoire et qu’ils fonctionnent (sauf celui là). 
+Créez au moins un test pour chaque exercice.
 
 
 Exemples d’utilisation :
@@ -505,3 +142,63 @@ Total success: (56/62)
 
 Bonus : trouvez le moyen d’utiliser du vert et du rouge pour rendre réussites et échecs plus visibles.
 """
+
+
+
+
+
+
+
+
+"""import os
+import json
+import importlib.util
+
+# Chemin vers le fichier JSON
+json_path = "check_exercises.json"
+
+# Charger le JSON
+with open(json_path, "r") as file:
+    data = json.load(file)
+
+# Parcourir les fichiers dans le JSON
+for file_entry in data["files"]:
+    file_name = file_entry["file_name"]
+    level = file_entry["level"]
+    tests = file_entry["test"]
+
+    # Construire le chemin du fichier Python
+    script_path = os.path.join(os.path.dirname(json_path), f"../ca_{level}/{file_name}")
+
+    # Vérifier si le fichier existe
+    if not os.path.exists(script_path):
+        print(f"Fichier non trouvé : {script_path}")
+        continue
+
+    # Charger dynamiquement le module Python
+    spec = importlib.util.spec_from_file_location(file_name, script_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    # Exécuter les tests
+    for test in tests:
+        id_test = test["id_test"]
+        arguments = test["arguments"]
+        expected_answer = test["answer"]
+
+        # Préparer les arguments pour la fonction principale du fichier
+        args = arguments.split() if arguments else []
+
+        # Appeler la fonction principale et comparer la réponse
+        if hasattr(module, "main"):
+            try:
+                # Appeler la fonction principale
+                result = module.main(*args)
+                if str(result) == expected_answer:
+                    print(f"Test {id_test} dans {file_name} : Réussi")
+                else:
+                    print(f"Test {id_test} dans {file_name} : Échoué (Attendu: {expected_answer}, Obtenu: {result})")
+            except Exception as e:
+                print(f"Erreur lors de l'exécution du test {id_test} dans {file_name} : {e}")
+        else:
+            print(f"Le fichier {file_name} ne contient pas de fonction main()")"""
