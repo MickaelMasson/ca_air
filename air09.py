@@ -22,7 +22,7 @@ def get_arguments() -> list :
     return arguments
 
 # Partie 3 : Résolution
-def display_new_sort_arguments() :
+def display_arguments_shifted_to_the_left() :
     arguments = get_arguments()
     min_number_of_argument_expected = 2
     if not is_valid_arguments(arguments, min_number_of_argument_expected) :
@@ -30,9 +30,10 @@ def display_new_sort_arguments() :
     print(", ".join(shifts_to_the_left(arguments)))
 
 # Partie 4 : Affichage
-display_new_sort_arguments()
+display_arguments_shifted_to_the_left()
 """
-Créez un programme qui décale tous les éléments d’un tableau vers la gauche. Le premier élément devient le dernier à chaque rotation.
+Créez un programme qui décale tous les éléments d’un tableau vers la gauche. 
+Le premier élément devient le dernier à chaque rotation.
 
 Utilisez une fonction de ce genre (selon votre langage) :
 ma_rotation(array) {
