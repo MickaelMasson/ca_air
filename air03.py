@@ -2,20 +2,20 @@
 import sys
 
 # Fonctions utilisées
-def get_single_arguments(arguments: list[str]) -> list[str] :
-    single_arguments = []
+def get_singles_arguments(arguments: list[str]) -> list[str] :
+    singles_arguments = []
     for argument in arguments :
         is_pair = False
-        for single_argument in single_arguments :
+        for single_argument in singles_arguments :
             if single_argument == argument :
                 is_pair = True
                 break
         if is_pair :
-            single_arguments.remove(argument)
+            singles_arguments.remove(argument)
         else :
-            single_arguments.append(argument)
+            singles_arguments.append(argument)
 
-    return single_arguments
+    return singles_arguments
 
 # Partie 1 : Gestion d'erreur
 def is_valid_arguments(arguments: list, number_of_argument: int) -> bool:
@@ -35,7 +35,7 @@ def display_single_arguments() :
     min_number_of_argument_expected = 2
     if not is_valid_arguments(arguments, min_number_of_argument_expected) :
         return
-    print(", ".join(get_single_arguments(arguments)))
+    print(", ".join(get_singles_arguments(arguments)))
 
 # Partie 4 : Affichage
 display_single_arguments()
