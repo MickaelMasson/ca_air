@@ -2,9 +2,9 @@
 import sys
 
 # Fonctions utilisées
-def get_split_argument(argument: str, separator: str) -> list:
-    for character in separator :
-        argument = argument.replace(character, "|")
+def get_split_argument(argument: str, separators: list[str]) -> list:
+    for separator in separators :
+        argument = argument.replace(separator, "|")
     news_arguments = argument.split("|")
     return news_arguments
 
@@ -27,8 +27,8 @@ def display_split_arguments() :
     if not is_valid_arguments(arguments, number_of_argument_expected) :
         return
     argument = arguments[0]
-    separator = "\n\t "
-    print("\n".join(get_split_argument(argument, separator)))    
+    separators = [" ", "\n", "\t"]
+    print("\n".join(get_split_argument(argument, separators)))    
 
 # Partie 4 : Affichage
 display_split_arguments()
