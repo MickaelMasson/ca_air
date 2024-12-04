@@ -68,8 +68,8 @@ def display_new_sorted_numbers() :
             return
     second_numbers = list(map(int, second_list))
     new_sorted_numbers = add_sorted_numbers_in_sorted_numbers(first_numbers, second_numbers)
-    new_sorted_list = list(map(str, new_sorted_numbers))
-    print(" ".join(new_sorted_list))
+    new_sorted_string_list = list(map(str, new_sorted_numbers))
+    print(" ".join(new_sorted_string_list))
 
 # Partie 4 : Affichage
 display_new_sorted_numbers()
