@@ -43,7 +43,8 @@ def display_new_sorted_numbers() :
     numbers = list(map(int, arguments[:-1]))
     new_number = int(arguments[-1])
     new_sort_numbers = add_number_in_sorted_numbers(numbers, new_number)
-    print(" ".join(list(map(str, new_sort_numbers))))
+    new_sorted_string_list = list(map(str, new_sort_numbers))
+    print(" ".join(new_sorted_string_list))
 
 # Partie 4 : Affichage
 display_new_sorted_numbers()
