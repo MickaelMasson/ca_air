@@ -2,7 +2,7 @@
 import sys
 
 # Fonctions utilisées
-def partition(numbers, start, end) :
+def partition(numbers: list[int], start: int, end: int) -> int :
     pivot = numbers[end]
     j = start
     for i in range(start,end) :
