@@ -1010,7 +1010,7 @@
                 {
                     "id_test": "1",
                     "arguments": [],
-                    "answer": "Error, le nombrre d'arguments n'est pas valide"
+                    "answer": "Error, le nombre d'arguments n'est pas valide"
                 },
                 {
                     "id_test": "2",
@@ -1064,7 +1064,7 @@
                 {
                     "id_test": "1",
                     "arguments": [],
-                    "answer": "Error, vos arguments ne sont pas valide"
+                    "answer": "Error, le nombre d'arguments n'est pas valide"
                 },
                 {
                     "id_test": "2",
