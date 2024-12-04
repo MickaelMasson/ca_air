@@ -12,7 +12,7 @@ def shifts_to_the_left(arguments: list) -> list:
 # Partie 1 : Gestion d'erreur
 def is_valid_arguments(arguments: list, number_of_argument: int) -> bool:
     if len(arguments) < number_of_argument :
-        print("Error, le nombrre d'arguments n'est pas valide")
+        print("Error, le nombre d'arguments n'est pas valide")
         return False
     return True
 
